@@ -8,8 +8,36 @@ env:
   GO_VERSION: "^1.22.0"
 
 jobs:
-  # check-yaml:
-  #   name: check-yaml
+  check-yaml:
+    name: check-yaml
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32 # v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: false
+      - name: Checkout
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - name: Checkout precommit config
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+        with:
+          repository: fapd777/pre-commit
+          path: precommit-config
+      - name: Install Python ${{ env.PY_VERSION }}.X
+        uses: actions/setup-python@39cd14951b08e74b54015e9e001cdefcf80e669f # v5
+        with:
+          python-version: ${{ env.PY_VERSION }}
+      - name: Install pre-commit dependencies
+        run: |
+          pip install pre-commit
+      - name: Copy precommit config
+        run: |
+          cp -r -n pre-commit/precommit-config/. -t $GITHUB_WORKSPACE
+      - name: Execute pre-commit
+        run: pre-commit run check-yaml --color=always --show-diff-on-failure --all-files
+
+  # prettier:
+  #   name: prettier
   #   runs-on: ubuntu-latest
   #   steps:
   #     - uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32 # v5
@@ -34,64 +62,36 @@ jobs:
   #       run: |
   #         cp -r -n pre-commit/precommit-config/. -t $GITHUB_WORKSPACE
   #     - name: Execute pre-commit
-  #       run: pre-commit run check-yaml --color=always --show-diff-on-failure --all-files
+  #       run: pre-commit run prettier --color=always --show-diff-on-failure --all-files
 
-  prettier:
-    name: prettier
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32 # v5
-        with:
-          go-version: ${{ env.GO_VERSION }}
-          cache: false
-      - name: Checkout
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
-      - name: Checkout precommit config
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
-        with:
-          repository: fapd777/pre-commit
-          path: pre-commit
-      - name: Install Python ${{ env.PY_VERSION }}.X
-        uses: actions/setup-python@39cd14951b08e74b54015e9e001cdefcf80e669f # v5
-        with:
-          python-version: ${{ env.PY_VERSION }}
-      - name: Install pre-commit dependencies
-        run: |
-          pip install pre-commit
-      - name: Copy precommit config
-        run: |
-          cp -r -n pre-commit/precommit-config/. -t $GITHUB_WORKSPACE
-      - name: Execute pre-commit
-        run: pre-commit run prettier --color=always --show-diff-on-failure --all-files
-
-  gitleaks:
-    name: gitleaks
-    runs-on: ubuntu-latest
-    #needs: terraform_validate
-    steps:
-      - uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32 # v5
-        with:
-          go-version: ${{ env.GO_VERSION }}
-          cache: false
-      - name: Checkout
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
-      - name: Checkout precommit config
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
-        with:
-          repository: fapd777/pre-commit
-          path: pre-commit
-      - name: Install Python ${{ env.PY_VERSION }}.X
-        uses: actions/setup-python@39cd14951b08e74b54015e9e001cdefcf80e669f # v5
-        with:
-          python-version: ${{ env.PY_VERSION }}
-      - name: Install pre-commit dependencies
-        run: |
-          pip install pre-commit
-      - name: Copy precommit config
-        run: |
-          cp -r -n pre-commit/precommit-config/. -t $GITHUB_WORKSPACE
-      - name: Execute pre-commit
-        run: pre-commit run gitleaks --color=always --show-diff-on-failure --all-files
+  # gitleaks:
+  #   name: gitleaks
+  #   runs-on: ubuntu-latest
+  #   #needs: terraform_validate
+  #   steps:
+  #     - uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32 # v5
+  #       with:
+  #         go-version: ${{ env.GO_VERSION }}
+  #         cache: false
+  #     - name: Checkout
+  #       uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+  #     - name: Checkout precommit config
+  #       uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+  #       with:
+  #         repository: fapd777/pre-commit
+  #         path: pre-commit
+  #     - name: Install Python ${{ env.PY_VERSION }}.X
+  #       uses: actions/setup-python@39cd14951b08e74b54015e9e001cdefcf80e669f # v5
+  #       with:
+  #         python-version: ${{ env.PY_VERSION }}
+  #     - name: Install pre-commit dependencies
+  #       run: |
+  #         pip install pre-commit
+  #     - name: Copy precommit config
+  #       run: |
+  #         cp -r -n pre-commit/precommit-config/. -t $GITHUB_WORKSPACE
+  #     - name: Execute pre-commit
+  #       run: pre-commit run gitleaks --color=always --show-diff-on-failure --all-files
 
   # terraform_fmt:
   #   name: terraform_fmt
