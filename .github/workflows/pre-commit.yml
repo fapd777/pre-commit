@@ -67,7 +67,7 @@ jobs:
   gitleaks:
     name: gitleaks
     runs-on: ubuntu-latest
-    needs: terraform_validate
+    #needs: terraform_validate
     steps:
       - uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32 # v5
         with:
