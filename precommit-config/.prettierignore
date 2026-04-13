@@ -1,0 +1,7 @@
+/sops
+README.md
+.terraform
+/.config
+/pre-commit
+/lambda
+/node_modules
