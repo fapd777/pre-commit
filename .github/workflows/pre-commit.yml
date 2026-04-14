@@ -34,7 +34,7 @@ jobs:
         run: |
           cp -r -n pre-commit/precommit-config/. -t $GITHUB_WORKSPACE
       - name: Execute pre-commit
-        run: pre-commit run check-yaml --color=always --show-diff-on-failure --all-files
+        run: pre-commit run check-yaml --config pre-commit/precommit-config/.pre-commit-config.yaml --color=always --show-diff-on-failure --all-files
 
   # prettier:
   #   name: prettier
