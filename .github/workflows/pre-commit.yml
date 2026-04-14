@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
         with:
           repository: fapd777/pre-commit
-          path: precommit-config
+          path: pre-commit
       - name: Install Python ${{ env.PY_VERSION }}.X
         uses: actions/setup-python@39cd14951b08e74b54015e9e001cdefcf80e669f # v5
         with:
