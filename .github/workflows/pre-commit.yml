@@ -21,5 +21,4 @@ jobs:
             -v "$GITHUB_WORKSPACE:/lint" \
             -w /lint \
             ghcr.io/antonbabenko/pre-commit-terraform:latest \
-            --config .pre-commit-config.yaml \
             run -a
