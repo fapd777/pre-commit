@@ -9,6 +9,7 @@ Add this file in your .github/workflows folder
 name: Pre-Commit
 
 on:
+  #workflow_dispatch:
   pull_request:
 
 jobs:
